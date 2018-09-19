@@ -31,7 +31,10 @@ class Kele
       "/mentors/#{mentor_id}/student_availability",
         headers: { "authorization" => @authentication_token }
       )
-    # available = JSON.parse(mentor_response.body)
+
+    # available = JSON.parse(mentor_response.body) #(1.whole list)
+
+    # (2.available list using .each do)
 
     # available = []
     #   JSON.parse(mentor_response.body)["slots"].each do |availability|
@@ -41,6 +44,8 @@ class Kele
     #   end
     #   available
 
+    #(3. available list using select)
+    
       JSON.parse(mentor_response.body)["slots"].select{ |availability| availability["booked"] == nil}
 
   end
