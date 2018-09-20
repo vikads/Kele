@@ -15,6 +15,12 @@ class Kele
     })
 
      @authentication_token = kele_client['auth_token']
+
+     # if @authentication_token.nil?
+     #   raise "Ups. Check your email and password. Try again"
+     # end
+     raise "Ups. Check your email and password. Try again" if @authentication_token.nil?
+
   end
 
   def get_me
@@ -45,7 +51,7 @@ class Kele
     #   available
 
     #(3. available list using select)
-    
+
       JSON.parse(mentor_response.body)["slots"].select{ |availability| availability["booked"] == nil}
 
   end
