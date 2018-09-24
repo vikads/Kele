@@ -18,6 +18,7 @@ class Kele
 
      @authentication_token = kele_client['auth_token']
 
+
      raise "Ups. Check your email and password. Try again" if @authentication_token.nil?
 
   end
@@ -28,7 +29,6 @@ class Kele
       headers: { "authorization" => @authentication_token }
     })
     JSON.parse(response.body)
-
   end
 
   def get_mentor_availability(mentor_id)
@@ -73,6 +73,6 @@ class Kele
     )
 
     puts "The message was sent" if new_message_response.success?
-    
+
   end
 end
