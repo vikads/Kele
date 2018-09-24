@@ -5,7 +5,7 @@ require './lib/roadmap'
 class Kele
 
   include HTTParty
-  include Roadmap 
+  include Roadmap
   base_uri 'https://www.bloc.io/api/v1'
 
   def initialize(email, password)
@@ -18,9 +18,6 @@ class Kele
 
      @authentication_token = kele_client['auth_token']
 
-     # if @authentication_token.nil?
-     #   raise "Ups. Check your email and password. Try again"
-     # end
      raise "Ups. Check your email and password. Try again" if @authentication_token.nil?
 
   end
@@ -40,24 +37,42 @@ class Kele
         headers: { "authorization" => @authentication_token }
       )
 
-    # available = JSON.parse(mentor_response.body) #(1.whole list)
-
-    # (2.available list using .each do)
-
-    # available = []
-    #   JSON.parse(mentor_response.body)["slots"].each do |availability|
-    #     if availability["booked"] == nil
-    #       available << availability
-    #     end
-    #   end
-    #   available
-
-    #(3. available list using select)
-
       JSON.parse(mentor_response.body)["slots"].select{ |availability| availability["booked"] == nil}
 
   end
 
+  def get_messages(page=1)
 
+      messages_response = self.class.get(
+        "/message_threads",
+        headers: { "authorization" => @authentication_token },
+        query: { "page" => page }
+      )
 
+    JSON.parse(messages_response.body)
+  end
+
+  def create_message(sender, recipient_id, stripped_text, token: nil, subject: nil)
+
+    query = {}
+    query["token"] = token unless token.nil?
+    query["subject"] = subject unless subject.nil?
+    query["sender"] = sender
+    query["recipient_id"] = recipient_id
+    query["stripped-text"] = stripped_text
+
+    puts "Sending query: #{query}"
+    puts query
+
+    new_message_response = self.class.post(
+      "/messages",
+      headers: {
+        "authorization" => @authentication_token,
+      },
+      query: query
+    )
+
+    puts "The message was sent" if new_message_response.success?
+    
+  end
 end
