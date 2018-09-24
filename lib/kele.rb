@@ -52,5 +52,27 @@ class Kele
     JSON.parse(messages_response.body)
   end
 
+  def create_message(sender, recipient_id, stripped_text, token: nil, subject: nil)
 
+    query = {}
+    query["token"] = token unless token.nil?
+    query["subject"] = subject unless subject.nil?
+    query["sender"] = sender
+    query["recipient_id"] = recipient_id
+    query["stripped-text"] = stripped_text
+
+    puts "Sending query: #{query}"
+    puts query
+
+    new_message_response = self.class.post(
+      "/messages",
+      headers: {
+        "authorization" => @authentication_token,
+      },
+      query: query
+    )
+
+    puts "The message was sent" if new_message_response.success?
+    
+  end
 end
