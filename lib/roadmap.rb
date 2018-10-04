@@ -18,4 +18,15 @@ module Roadmap
     JSON.parse(checkpoint_respond.body)
   end
 
+  def get_remaining_checkpoints(chain_id)
+    #chain_id = 6584
+    remaining_response = self.class.get(
+      "/enrollment_chains/#{chain_id}/checkpoints_remaining_in_section",
+      headers: { "authorization" => @authentication_token }
+      )
+
+      JSON.parse(remaining_response.body)
+
+  end
+
 end
